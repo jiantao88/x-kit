@@ -14,6 +14,7 @@
 
 - 2024-12-24 添加每日发布推文功能 `post-twitter-daily.yml` `post-tweet.ts`
 - 2025-01-02 添加获取用户推文功能 `fetch-user-tweets.ts`
+- 2025-03-24 优化推文获取脚本，支持从 `dev-accounts.json` 中指定的用户获取推文
 
 ## 安装
 
@@ -25,42 +26,39 @@ bun install
 
 ### 1. 配置环境变量
 
-在项目根目录创建 `.env` 文件,添加以下配置:
+在项目根目录创建 `.env` 文件，添加以下内容：
 
 ```bash
-AUTH_TOKEN=你的X认证Token
-GET_ID_X_TOKEN=用于获取用户ID的Token
+AUTH_TOKEN=你的Twitter认证令牌
+GET_ID_X_TOKEN=你的X-Token
 ```
 
-### 2. 添加需要追踪的用户
+### 2. 配置要追踪的用户
 
-在 `dev-accounts.json` 中添加用户信息:
+编辑 `dev-accounts.json` 文件，添加你想要追踪的用户信息：
 
 ```json
-{
-  "username": "用户名",
-  "twitter_url": "用户主页链接", 
-  "description": "用户描述",
-  "tags": ["标签1", "标签2"]
-}
+[
+  {
+    "username":"用户名",
+    "twitter_url":"https://x.com/用户名",
+    "description":"用户描述",
+    "tags":["标签1","标签2"]
+  }
+]
 ```
 
-### 3. 运行脚本
+### 3. 获取用户推文
 
 ```bash
-# 获取用户信息
-bun run scripts/index.ts
-
-# 获取最新推文
 bun run scripts/fetch-tweets.ts
-
-# 批量关注用户
-bun run scripts/batch-follow.ts
 ```
+
+获取的推文将保存在 `./tweets/YYYY-MM-DD.json` 文件中。
 
 ## 自动化部署
 
-项目使用 GitHub Actions 实现自动化:
+项目使用 GitHub Actions 实现自动化：
 
 - `get-home-latest-timeline.yml`: 每30分钟获取一次最新推文
 - `daily-get-tweet-id.yml`: 每天获取一次用户信息
